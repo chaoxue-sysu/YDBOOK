@@ -8,6 +8,8 @@ from log import LocalLogger
 def get_para():
     AK=''
     SK=''
+    id=''
+    pw=''
     with open('../config/para.txt', 'r', encoding='utf-8') as br:
         for line in br:
             if line.startswith('#'):
@@ -19,14 +21,19 @@ def get_para():
                 AK=arr[1].replace('"','').replace('\'','').strip()
             if arr[0]=='SK':
                 SK=arr[1].replace('"','').replace('\'','').strip()
-    return AK,SK
+            if arr[0]=='NetID':
+                id=arr[1].replace('"','').replace('\'','').strip()
+            if arr[0]=='Password':
+                pw=arr[1].replace('"','').replace('\'','').strip()
+    return AK,SK,id,pw
 
 def add():
     time_range=[entry4.get(),entry5.get()]
     paras={}
     # global AK,SK
     # print(AK,SK)
-    paras['AK'],paras['SK']=get_para()
+    # paras['AK'],paras['SK']=get_para()
+    paras['AK'],paras['SK']=AK,SK
     paras['email']=''
     paras['log']=LocalLogger(END,result)
     paras['log'].log('Disclaimer: the code is free of charge. All materials are provided without any warranty. Please use them at your own risk.')
@@ -76,7 +83,8 @@ def add():
 
 root = Tk()
 root.geometry('500x700')
-
+global AK,SK
+AK,SK,id,pw=get_para()
 
 
 time_list=[]
@@ -95,8 +103,10 @@ root.iconbitmap('sysu.ico')
 lablet=Label(root,text='SYB System',font='Helvetica 18 bold')
 lable1=Label(root,text='Net ID',font='Helvetica 10 ')
 entry1=Entry(root,width=10)
+entry1.insert(0,id)
 lable2=Label(root,text='Password',font='Helvetica 10 ')
 entry2=Entry(root,width=10)
+entry2.insert(0,pw)
 lable3=Label(root,text='日期',font='Helvetica 10 ')
 entry3=ttk.Combobox(root,state='readonly',width=10)
 entry3['value']=date_tp

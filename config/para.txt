@@ -1,3 +1,6 @@
 # 将百度智能云文字识别API需要使用的AK/SK (API Key、Secret Key)参数填入对应参数中，申请教程链接：http://ai.baidu.com/forum/topic/show/867951
 AK: 'XXXX'
 SK: 'XXXX'
+# 可以将NetID和密码写入此处，就不需要每次在GUI输入
+NetID:''
+Password:''
