@@ -1,11 +1,26 @@
 ## sysu venue booking
 import requests,json,time, datetime,sys,threading,copy
-from pyquery import PyQuery as pq
-
 from sysu_cas import login,check_passwd
 from recognize_captcha import get_AT
 from log import Logger
 
+import inspect
+import ctypes
+def _async_raise(tid, exctype):
+    """raises the exception, performs cleanup if needed"""
+    tid = ctypes.c_long(tid)
+    if not inspect.isclass(exctype):
+        exctype = type(exctype)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exctype))
+    if res == 0:
+        raise ValueError("invalid thread id")
+    elif res != 1:
+        # """if it returns a number greater than one, you're in trouble,
+        # and you should call it again with exc=NULL to revert the effect"""
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
+        raise SystemError("PyThreadState_SetAsyncExc failed")
+def stop_thread(thread):
+    _async_raise(thread.ident, SystemExit)
 
 head_data = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'
@@ -186,14 +201,15 @@ class book(threading.Thread):
     def __init__(self,paras):
         threading.Thread.__init__(self)
         self._paras=paras
+        self.setDaemon(True)
     # def set_para(self,paras):
     #     self._paras=paras
     def run(self):
         logger=self._paras['log']
-        logger.log('开始执行')
+        logger.log(f'开始执行任务 PID:{self.ident}')
         # time.sleep(20)
         self.msg=start_book(self._paras)
-        logger.log('完成')
+        logger.log(f'完成 PID:{self.ident}')
         pass
     def get_msg(self):
         threading.Thread.join(self)
@@ -201,6 +217,11 @@ class book(threading.Thread):
             return self.msg
         except:
             return 'Exception!'
+    def stop(self):
+        logger=self._paras['log']
+        stop_thread(self)
+        logger.log(f'停止任务 PID:{self.ident}')
+        # threading.Event.clear(self)
 
 
 def time_offset(st,offset):

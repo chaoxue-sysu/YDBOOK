@@ -4,6 +4,9 @@ sys.path.append('../')
 from sysu_book import *
 
 from log import LocalLogger
+# global first_time,running_task
+first_time=True
+running_task=False
 
 def get_para():
     AK=''
@@ -28,15 +31,23 @@ def get_para():
     return AK,SK,id,pw
 
 def add():
-    time_range=[entry4.get(),entry5.get()]
     paras={}
+    paras['log']=LocalLogger(END,result)
+    global first_time,running_task,bk
+    if running_task:
+        paras['log'].log(f'已有任务在运行 PID:{bk.ident}，不能运行新任务！请先结束任务')
+        return
+    time_range=[entry4.get(),entry5.get()]
     # global AK,SK
     # print(AK,SK)
     # paras['AK'],paras['SK']=get_para()
     paras['AK'],paras['SK']=AK,SK
     paras['email']=''
-    paras['log']=LocalLogger(END,result)
-    paras['log'].log('Disclaimer: the code is free of charge. All materials are provided without any warranty. Please use them at your own risk.')
+
+
+    if first_time:
+        paras['log'].log('Disclaimer: the code is free of charge. All materials are provided without any warranty. Please use them at your own risk.')
+    first_time=False
 
     # paras['log']=logger
     date=entry3.get()
@@ -71,18 +82,24 @@ def add():
         return
     else:
         paras['log'].log('密码验证成功！')
-        # threading.Thread(target=start_book,args=(paras,)).start()
         bk=book(paras)
+        running_task=True
         bk.start()
-        # msg=bk.get_msg()
-    # result.config(text='%s'%msg,fg='green',
-    #                      wraplength = 200,
-    #                      justify = 'left')
-    #     paras['log'].log('%s'%msg)
-    return bk
+    return
+
+def stop_thread():
+    try:
+        global running_task
+        bk.stop()
+        running_task=False
+    except:
+        LocalLogger(END,result).log('WARNING: No running task!')
+
+def clear_log():
+    LocalLogger(END,result).log_clear()
 
 root = Tk()
-root.geometry('500x700')
+root.geometry('500x720')
 global AK,SK
 AK,SK,id,pw=get_para()
 
@@ -127,7 +144,9 @@ entry6['value']=('立刻','出票时间')
 entry6.current(1)
 
 
-btn=Button(root,command=add,text='提交',font='Helvetica 12 bold',bg='green',fg='white',width=10)
+btn=Button(root,command=add,text='提交任务',font='Helvetica 12 bold',bg='green',fg='white',width=10)
+stop_btn=Button(root,command=stop_thread,text='停止任务',font='Helvetica 12 bold',bg='orange',fg='white',width=10)
+clear_btn=Button(root,command=clear_log,text='清除日志',font='Helvetica 12 bold',bg='blue',fg='white',width=10)
 # result=Label(root)
 result=Text(root,width=60)
 
@@ -145,7 +164,9 @@ lable5.grid(row=5,column=0,sticky=N+S+E+W, pady=5)
 entry5.grid(row=5,column=1,sticky=N+S+E+W, pady=5)
 lable6.grid(row=6,column=0,sticky=N+S+E+W, pady=5)
 entry6.grid(row=6,column=1,sticky=N+S+E+W, pady=5)
-btn.grid(row=7,column=1,sticky=N+S+E+W,pady=20)
+btn.grid(row=7,column=0,pady=5)
+stop_btn.grid(row=7,column=1,pady=5)
+clear_btn.grid(row=9,column=0)
 result.grid(row=8,column=0,columnspan=2,padx=20, pady=20,sticky=N+S+E+W)
 root.mainloop()
 

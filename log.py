@@ -32,14 +32,16 @@ class LocalLogger():
         self.ele=ele
     def log(self,content=''):
         content=time.strftime("\n%Y-%m-%d %H:%M:%S [INFO] ", time.localtime(time.time()))+ "%s"%(content)
-        print(content)
+        # print(content)
             # wt = FF.getWriter(self.logPath, True)
         self.ele.insert(self.end,content)
         self.ele.see(self.end)
 
     def log_flow(self,content):
         content=time.strftime("\n%Y-%m-%d %H:%M:%S [INFO] ", time.localtime(time.time()))+ "%s"%(content)
-        print(content)
+        # print(content)
         self.ele.insert(self.end,content)
         self.ele.see(self.end)
+    def log_clear(self):
+        self.ele.delete(0.0,self.end)
 
