@@ -3,7 +3,7 @@
 1. 下载项目源码并进入项目根目录。
 2. 确保 Python >=3.6，安装依赖包：`pip install -r requirements.txt`
 3. 在`config/para.txt`中按照提示提供百度智能云文字识别API需要使用的AK/SK (API Key、Secret Key)参数，
-申请教程链接：http://ai.baidu.com/forum/topic/show/867951。
+申请教程链接：[http://ai.baidu.com/forum/topic/show/867951](http://ai.baidu.com/forum/topic/show/867951)。
 4. 进入`app`目录，执行`python gui.py`按照图形界面提示操作即可。
 
 ### Enviroment
