@@ -116,6 +116,7 @@ def pay(book_id):
     return rq.json()
 
 def book_main(interval_sec,times,end_time,id,pw,logger,AK,SK):
+    times['time']=list(set(times['time']))
     fail_msg='您预定失败！预定信息: %s %s'%(times['date'],', '.join(times['time']))
     global session
     session=login(id,pw,logger,AK,SK)

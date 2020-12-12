@@ -99,7 +99,7 @@ def clear_log():
     LocalLogger(END,result).log_clear()
 
 root = Tk()
-root.geometry('500x720')
+root.geometry('500x730')
 global AK,SK
 AK,SK,id,pw=get_para()
 
@@ -129,12 +129,12 @@ entry3=ttk.Combobox(root,state='readonly',width=10)
 entry3['value']=date_tp
 
 entry3.current(2)
-lable4=Label(root,text='时间段1',font='Helvetica 10')
+lable4=Label(root,text='时间段1 *',font='Helvetica 10')
 entry4=ttk.Combobox(root,state='readonly',width=10)
 entry4['value']=time_tp
 entry4.current(11)
 # entry4=Entry(root,width=20)
-lable5=Label(root,text='时间段2',font='Helvetica 10',width=10)
+lable5=Label(root,text='时间段2 *',font='Helvetica 10',width=10)
 entry5=ttk.Combobox(root,state='readonly',width=10)
 entry5['value']=time_tp
 entry5.current(12)
@@ -142,6 +142,8 @@ lable6=Label(root,text='执行时间',font='Helvetica 10')
 entry6=ttk.Combobox(root,state='readonly',width=10)
 entry6['value']=('立刻','出票时间')
 entry6.current(1)
+
+lableX=Label(root,text='* 如果只想选择一个时间段，请将“时间段1”和“时间段2”设为同一时间段。',font='Helvetica 10',fg='red')
 
 
 btn=Button(root,command=add,text='提交任务',font='Helvetica 12 bold',bg='green',fg='white',width=10)
@@ -164,9 +166,10 @@ lable5.grid(row=5,column=0,sticky=N+S+E+W, pady=5)
 entry5.grid(row=5,column=1,sticky=N+S+E+W, pady=5)
 lable6.grid(row=6,column=0,sticky=N+S+E+W, pady=5)
 entry6.grid(row=6,column=1,sticky=N+S+E+W, pady=5)
-btn.grid(row=7,column=0,pady=5)
-stop_btn.grid(row=7,column=1,pady=5)
-clear_btn.grid(row=9,column=0)
-result.grid(row=8,column=0,columnspan=2,padx=20, pady=20,sticky=N+S+E+W)
+btn.grid(row=7,column=0,pady=10)
+stop_btn.grid(row=7,column=1,pady=10)
+clear_btn.grid(row=10,column=0)
+lableX.grid(row=8,columnspan=2, pady=0)
+result.grid(row=9,column=0,columnspan=2,padx=20, pady=8,sticky=N+S+E+W)
 root.mainloop()
 
