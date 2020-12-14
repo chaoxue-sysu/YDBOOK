@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import sys
 sys.path.append('../')
 from sysu_book import *
 
